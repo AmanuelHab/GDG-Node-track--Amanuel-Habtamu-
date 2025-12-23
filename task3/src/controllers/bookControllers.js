@@ -1,52 +1,72 @@
 import Joi from "joi";
-import bookSchema from "../utils/validationSchema";
+import { bookSchema } from "../utils/validationSchema.js";
 
-let books = [];
-let nextId = 1;
+let books = [
+  {
+    id: 1,
+    title: "The Alchemist",
+    author: "The Chemist",
+    price: "$40",
+  },
+  {
+    id: 2,
+    title: "ተልሚድ",
+    author: "ይስማዕከ ወርቁ",
+    price: "$30",
+  },
+];
+let nextId = 3;
 
 const getAllBooks = (req, res) => {
-    res.send(200).json(JSON.stringify(books));
+  res.status(200).json(books);
 };
 
 const searchBook = (req, res) => {
-    res.send(200).type("text").send("You are on the search page.");
+  res.status(200).type("text").send("You are on the search page.");
 };
 
 const getBook = (req, res) => {
-    const { id } = req.params.id;
-    const book = books.find(book => book.id === id);
+  const id = Number(req.params.id);
+  if (isNaN(id)) {
+    return res.status(400).send("Invalid ID");
+  }
+  const book = books.find((book) => book.id === id);
 
-    if(!book){
-        return res.status(404).send(`Book with ID ${id} not found`);
-    }
+  if (!book) {
+    return res.status(404).send(`Book with ID ${id} not found`);
+  }
 
-    res.json(book);
+  res.json(book);
 };
 
-const createBook = (req, res) =>{
-    const { error } = bookSchema.validate(req.body);
-    if(error){
-        return res.status(400).json({ error: error.details[0].message});
-    }
+const createBook = (req, res) => {
+  const { error } = bookSchema.validate(req.body);
+  if (error) {
+    return res.status(400).json({ error: error.details[0].message });
+  }
 
-    const newBook = {
-        id: nextId++,
-        title: req.body.title,
-        author: req.body.author,
-        price: req.body.price
-    }
-    books.push(newBook);
-    res.status(201).json({ message: "Book registerd!", book: newBook });
+  const newBook = {
+    id: nextId++,
+    title: req.body.title,
+    author: req.body.author,
+    price: req.body.price,
+  };
+  books.push(newBook);
+  res.status(201).json({ message: "Book registered!", book: newBook });
 };
-const deleteBook = (req, res) =>{
-    const {id} = req.params.id;
-    const bookIndex = books.findIndex(book => book.id === id);
+const deleteBook = (req, res) => {
+  const id = Number(req.params.id);
+  if (isNaN(id)) {
+    return res.status(400).send("Invalid ID");
+  }
+  const bookIndex = books.findIndex((book) => book.id === id);
 
-    if(bookIndex === -1){
-        return res.status(404).send(`Book with ID ${id} not found`);
-    }
+  if (bookIndex === -1) {
+    return res.status(404).send(`Book with ID ${id} not found`);
+  }
+  books.splice(bookIndex, 1);
 
-    const deletedB = books.splice(bookIndex, 1)[0];
+  res.status(200).send("Book deleted successfully.");
+};
 
-    res.status(200).send("Book deleted successfully.");
-}
+export default { getAllBooks, searchBook, getBook, createBook, deleteBook };

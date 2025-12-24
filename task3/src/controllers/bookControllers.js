@@ -6,13 +6,13 @@ let books = [
     id: 1,
     title: "The Alchemist",
     author: "The Chemist",
-    price: "$40",
+    price: 440,
   },
   {
     id: 2,
     title: "ተልሚድ",
     author: "ይስማዕከ ወርቁ",
-    price: "$30",
+    price: 330,
   },
 ];
 let nextId = 3;

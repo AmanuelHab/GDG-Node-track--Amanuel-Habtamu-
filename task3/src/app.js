@@ -11,5 +11,4 @@ app.use(express.json());
 
 app.use("/books", bookRoutes);
 
-// Error handling middleware (must be last)
 app.use(errorHandler);

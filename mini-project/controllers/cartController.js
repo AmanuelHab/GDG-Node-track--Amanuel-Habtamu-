@@ -1,4 +1,6 @@
 import Cart from "../models/cartModel.js";
+import Product from "../models/productModel.js";
+import { cartValidationSchema } from "../utils/validationSchema.js";
 
 export const getCart = async (req, res) =>{
     try {let cart = await Cart.findOne({ userId: req.body.userId });
@@ -14,6 +16,11 @@ export const getCart = async (req, res) =>{
 
 export const addItemToCart = async (req, res) => {
     try {
+        const { error } = cartValidationSchema.validate(req.body);
+        if(error){
+            return res.status(404).json({ errors: error.details[0]})
+        }
+
         let cart = await Cart.findOne({ userId: req.body.userId });
 
         if(!cart){

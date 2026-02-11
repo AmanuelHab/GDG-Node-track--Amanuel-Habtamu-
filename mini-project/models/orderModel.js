@@ -26,10 +26,15 @@ const orderSchema = new mongoose.Schema(
                 minlength: 3,
                 required: true,
                 trim : true
+            },
+            email:{
+                type: String,
+                required: true
+            },
+            address: {
+                type: String,
+                required: true
             }
-        },
-        date: {
-            type : Date
         }
     },
     {

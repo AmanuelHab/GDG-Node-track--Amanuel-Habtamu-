@@ -4,6 +4,7 @@ import connectDB from "./config/dbConfig.js";
 import productRouter from "./routers/productRouter.js";
 import cartRouter from "./routers/cartRouter.js";
 import orderRouter from "./routers/orderRouter.js";
+import errorHandler from "./middleware/errorHandler.js";
 
 
 dotenv.config();
@@ -18,6 +19,8 @@ app.use("/products", productRouter);
 app.use("/cart", cartRouter);
 app.use("/orders", orderRouter);
 
+app.use(errorHandler);
+
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}...`);
-})
+});
